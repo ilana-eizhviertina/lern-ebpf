@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y \
     clang llvm libbpf-dev gcc git make pkg-config \
     iproute2 sudo zlib1g-dev elfutils libelf-dev \
     linux-headers-generic linux-tools-generic \
-    wget tar curl \
+    wget tar curl iputils-ping \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Go (DYNAMICALLY detected Arch)
