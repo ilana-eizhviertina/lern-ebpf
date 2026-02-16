@@ -24,7 +24,8 @@ The Dockerfile creates a "trace-ready" Linux environment. Here is what it does:
 This lab is designed to hold multiple eBPF programs. Each program gets its own folder:
 
 * `/tracepoint` - A program that hooks into kernel system calls.
-* `/xdp` - A program that acts as a low-level network firewall.
+* `/xdp` - A program that acts as a low-level network firewall for ingress traffic.
+* `/tc` - A program that acts as a low-level network firewall for egress traffic.
 
 ---
 
