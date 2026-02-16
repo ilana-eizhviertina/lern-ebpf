@@ -5,7 +5,6 @@
 #include <linux/ip.h>
 #include <bpf/bpf_helpers.h>
 
-// apt-get update && apt-get install -y iputils-ping
 char LICENSE[] SEC("license") = "Dual MIT/GPL";
 
 #define bpf_htons(x) __builtin_bswap16(x)
@@ -42,7 +41,6 @@ int ping_drop(struct xdp_md *ctx) {
     if ((void *)(ip + 1) > data_end)
         return XDP_PASS;
 
-
     // ==========================================
     // Extracting and Logging Variables
     // ==========================================
@@ -65,9 +63,8 @@ int ping_drop(struct xdp_md *ctx) {
     bpf_printk("Source IP (raw hex): %x", src_ip);
     bpf_printk("Dest IP   (raw hex): %x", dst_ip);
     
-    if (dst_ip == IP4(8, 8, 8, 8)) { // Run 'ping 8.8.8.8' (Will hang/fail)
-        bpf_printk("XDP: Dropped ping to Google!");
-        return XDP_DROP;
+    if (dst_ip == IP4(127, 0, 0, 1)) {
+        bpf_printk("XDP: BOOP-BOOP! Ping to localhost.");
     }
 
     // If it's an ICMP packet (Ping = Protocol 1), Drop it!
