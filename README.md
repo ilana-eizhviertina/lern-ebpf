@@ -16,6 +16,7 @@ The Dockerfile creates a "trace-ready" Linux environment. Here is what it does:
 * **Kernel Headers:** Installs `linux-headers-generic` and creates a symbolic link so the compiler can find them (`asm/types.h`).
 * **Go Installation:** Automatically detects your architecture.
 * **BPF Tool:** Manually installs `bpftool v7.5.0` (essential for inspecting the kernel) to avoid version mismatches on Mac Docker.
+
 Because eBPF requires a Linux Kernel, this project runs inside a Docker container with special privileges.
 ---
 
