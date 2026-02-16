@@ -3,9 +3,7 @@
 This repository contains a complete development environment for writing and running eBPF programs using Golang.
 
 📚 Learning Resource:
-I am building this repository while learning from the book "Learning eBPF" by Liz Rice. While the book covers the core concepts, I am writing and publishing my examples here using Go to demonstrate how to implement these patterns in a Go environment.
-
-Note: Because eBPF requires a Linux Kernel, this project runs inside a Docker container with special privileges.
+I am building this repository while learning from the book "Learning eBPF" by Liz Rice. I use her examples as a foundation, implementing them in Go and extending them with my own custom additions and logic. Please note that in some places, the implementation varies significantly from the book.
 
 ---
 
@@ -18,7 +16,7 @@ The Dockerfile creates a "trace-ready" Linux environment. Here is what it does:
 * **Kernel Headers:** Installs `linux-headers-generic` and creates a symbolic link so the compiler can find them (`asm/types.h`).
 * **Go Installation:** Automatically detects your architecture.
 * **BPF Tool:** Manually installs `bpftool v7.5.0` (essential for inspecting the kernel) to avoid version mismatches on Mac Docker.
-
+Because eBPF requires a Linux Kernel, this project runs inside a Docker container with special privileges.
 ---
 
 ## Project Structure
