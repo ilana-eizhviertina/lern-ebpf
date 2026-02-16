@@ -27,7 +27,7 @@ int hello_world(void *ctx) {
     bpf_get_current_comm(&comm, sizeof(comm));
     bpf_printk("EXEC: Name=%s PID=%d UID=%d", comm, pid, uid);
 
-    // 3. LOOKUP: Does this UID exist in the map?
+    // LOOKUP: Does this UID exist in the map?
     val = bpf_map_lookup_elem(&exec_counts, &uid);
 
     if (val) {
