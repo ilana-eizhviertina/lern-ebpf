@@ -5,11 +5,15 @@
 #include <linux/ip.h>
 #include <bpf/bpf_helpers.h>
 
+// apt-get update && apt-get install -y iputils-ping
 char LICENSE[] SEC("license") = "Dual MIT/GPL";
 
 #define bpf_htons(x) __builtin_bswap16(x)
 
-// XDP is for the ingress traffic. It runs before the kernel even processes the packet.
+// Helper to convert a human-readable IP to a raw Network-Byte-Order integer
+#define IP4(a, b, c, d) ((a) | ((b) << 8) | ((c) << 16) | ((d) << 24))
+
+// XDP is for ingress traffic. It runs before the kernel even processes the packet.
 // This program will drop all ICMP (Ping) packets that it sees.
 // The 'ctx' parameter gives us access to the packet data and metadata.
 SEC("xdp")
@@ -37,6 +41,34 @@ int ping_drop(struct xdp_md *ctx) {
     struct iphdr *ip = (void *)(eth + 1);
     if ((void *)(ip + 1) > data_end)
         return XDP_PASS;
+
+
+    // ==========================================
+    // Extracting and Logging Variables
+    // ==========================================
+    
+    // Get the protocol (1 = ICMP/Ping, 6 = TCP, 17 = UDP)
+    __u8 protocol = ip->protocol;
+    
+    // Get the Source and Destination IP addresses.
+    // Note: These are stored as raw 32-bit integers in Network Byte Order.
+    __u32 src_ip = ip->saddr;
+    __u32 dst_ip = ip->daddr;
+
+    // Get the Time To Live (TTL) of the packet
+    __u8 ttl = ip->ttl;
+
+    // We use separate bpf_printk calls because older kernels restrict 
+    // how many variables you can print in a single line.
+    bpf_printk("--- New IP Packet ---");
+    bpf_printk("Protocol: %d | TTL: %d", protocol, ttl);
+    bpf_printk("Source IP (raw hex): %x", src_ip);
+    bpf_printk("Dest IP   (raw hex): %x", dst_ip);
+    
+    if (dst_ip == IP4(8, 8, 8, 8)) { // Run 'ping 8.8.8.8' (Will hang/fail)
+        bpf_printk("XDP: Dropped ping to Google!");
+        return XDP_DROP;
+    }
 
     // If it's an ICMP packet (Ping = Protocol 1), Drop it!
     if (ip->protocol == IPPROTO_ICMP) {
