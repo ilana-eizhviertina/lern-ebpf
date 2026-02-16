@@ -58,14 +58,17 @@ To compile the C code, generate the Go bindings, build the Go binary, and start 
 
 1) To run the Tracepoint lab:
 ```bash
-export GOTOOLCHAIN=local
-make run APP=tracepoint
+make run-trace
 ```
 
 2) To run the XDP lab:
 ```bash
-export GOTOOLCHAIN=local
-make run APP=xdp
+make run-xdp
+```
+
+3) To run the Traffic Control lab:
+```bash
+make run-tc
 ```
 
 ## How to View the Logs
