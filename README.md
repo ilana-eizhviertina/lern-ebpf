@@ -1,7 +1,6 @@
 # eBPF Learning Lab (Docker on Mac)
 
 This repository contains a complete development environment for writing and running eBPF programs using Golang.
-
 Because eBPF requires a Linux Kernel, this project runs inside a Docker container with special privileges.
 
 ---
@@ -33,3 +32,47 @@ Open your terminal in this folder and run:
 
 ```bash
 docker build -t ebpf-lab .
+```
+
+Once built, start the privileged container:
+
+```bash
+make start
+```
+
+## 🏃‍♂️ How to Run the Code
+
+Once you are inside the container (e.g., root@...:/code#), follow these steps:
+
+Step A: Initialize (First Time Only)
+
+If you haven't initialized the Go module yet:
+```bash
+make init
+```
+
+Step B: Build & Run
+To compile the C code, generate the Go bindings, build the Go binary, and start the application, run the following commands based on the lab you want to use:
+
+1) To run the Tracepoint lab:
+```bash
+export GOTOOLCHAIN=local
+make run APP=tracepoint
+```
+
+2) To run the XDP lab:
+```bash
+export GOTOOLCHAIN=local
+make run APP=xdp
+```
+
+## How to View the Logs
+
+If an app uses bpf_printk, you need a second terminal to see the kernel logs.
+
+Find your container ID:
+```bash
+docker ps
+docker exec -it <container_id> bash
+cat /sys/kernel/debug/tracing/trace_pipe
+```
