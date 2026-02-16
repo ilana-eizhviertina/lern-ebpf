@@ -9,7 +9,7 @@ char LICENSE[] SEC("license") = "Dual MIT/GPL";
 
 #define bpf_htons(x) __builtin_bswap16(x)
 
-// XDP is for ingress traffic. It runs before the kernel even processes the packet.
+// XDP is for the ingress traffic. It runs before the kernel even processes the packet.
 // This program will drop all ICMP (Ping) packets that it sees.
 // The 'ctx' parameter gives us access to the packet data and metadata.
 SEC("xdp")
