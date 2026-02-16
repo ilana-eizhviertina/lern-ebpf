@@ -12,7 +12,6 @@ import (
 )
 
 // When we run 'go generate', it runs this command to compile the C code.
-//
 //go:generate go run github.com/cilium/ebpf/cmd/bpf2go -output-dir gen -go-package gen Bpf hello.bpf.c
 
 func main() {
@@ -20,14 +19,14 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// 1. Load the eBPF program
+	// Load the eBPF program
 	objs := gen.BpfObjects{}
 	if err := gen.LoadBpfObjects(&objs, nil); err != nil {
 		log.Fatalf("loading objects: %v", err)
 	}
 	defer objs.Close()
 
-	// 2. Attach to the kernel
+	// Attach to the kernel
 	kp, err := link.Tracepoint("syscalls", "sys_enter_execve", objs.HelloWorld, nil)
 	if err != nil {
 		log.Fatalf("opening tracepoint: %v", err)
@@ -36,7 +35,7 @@ func main() {
 
 	log.Println("Counting processes... (Press Ctrl+C to exit)")
 
-	// 3. The Dashboard Loop
+	// The Dashboard Loop
 	ticker := time.NewTicker(1 * time.Second)
 	defer ticker.Stop()
 
