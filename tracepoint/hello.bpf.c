@@ -7,7 +7,7 @@ char LICENSE[] SEC("license") = "Dual MIT/GPL";
 // Define "u32" so we can use it (standard kernel shortcut)
 typedef unsigned int u32;
 
-// 1. Define the MAP (The Database)
+// Define the MAP (The Database)
 struct {
     __uint(type, BPF_MAP_TYPE_HASH); // Hash Map (Key/Value store)
     __uint(max_entries, 1024);       // Can hold 1024 different Users
@@ -15,9 +15,7 @@ struct {
     __type(value, u32);              // Value = Counter
 } exec_counts SEC(".maps");
 
-
-
-// 2. The Program
+// The Program
 SEC("tp/syscalls/sys_enter_execve")
 int hello_world(void *ctx) {
     u32 uid = bpf_get_current_uid_gid() & 0xFFFFFFFF;
@@ -42,35 +40,3 @@ int hello_world(void *ctx) {
 
     return 0;
 }
-
-
-// //go:build ignore
-
-// #include <linux/bpf.h>
-// #include <bpf/bpf_helpers.h>
-
-// // License is mandatory. The kernel will reject the program without it.
-// char LICENSE[] SEC("license") = "Dual MIT/GPL";
-
-// // Define where to attach.
-// // "tp" = Tracepoint
-// // "syscalls" = Category
-// // "sys_enter_execve" = The event (triggers anytime a new process starts)
-// SEC("tp/syscalls/sys_enter_execve")
-// int hello_world(void *ctx) {
-//     // Create a buffer to hold the name (16 characters max)
-//     char comm[16];
-//     bpf_get_current_comm(&comm, sizeof(comm));
-
-//     // Get the Process ID
-//     int pid = bpf_get_current_pid_tgid() >> 32;
-
-//     // NEW: Get the User ID (UID)
-//     // The helper returns 64 bits: Top 32 is GID, Bottom 32 is UID.
-//     // We use '& 0xFFFFFFFF' to grab just the bottom part.
-//     unsigned int uid = bpf_get_current_uid_gid() & 0xFFFFFFFF;
-
-//     bpf_printk("EXEC: Name=%s PID=%d UID=%d", comm, pid, uid);
-
-//     return 0;
-// }
