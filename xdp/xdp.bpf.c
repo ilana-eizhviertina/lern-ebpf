@@ -74,18 +74,28 @@ int ping_drop(struct xdp_md *ctx) {
     // Therefore, the Web Server's port (80/443) is the src_port.
     
     // 1. Block incoming responses from Web Servers (Port 80/443)
+
+    // To test this, try visiting a website (e.g., http://example.com) from the machine where this XDP program is running. 
+    // You should see the block message in the kernel logs, and the website will fail to load.
     if (src_port == 80 || src_port == 443) {
         bpf_printk("XDP BLOCK: Incoming web response from Port %d dropped", src_port);
         return XDP_DROP;
     }
 
     // 2. Block incoming requests TO your local ports (e.g., if you had a local SSH server)
+
+    // To test this, try running an SSH server on your machine (e.g., `sudo service ssh start`) 
+    // and then attempt to SSH into it from another machine (e.g., `ssh user@your_machine_ip`).
+    // You should see the block message in the kernel logs, and the SSH connection will fail to establish.
     if (dst_port == 22) {
         bpf_printk("XDP BLOCK: Incoming SSH attempt to Port 22 dropped");
         return XDP_DROP;
     }
 
     // 3. Keep your original ICMP/Ping block
+
+    // To test this, try running `ping 127.0.0.1` in another terminal.
+    // You should see the block message in the kernel logs, and the ping will fail to get a response.
     if (ip->protocol == IPPROTO_ICMP) {
         // Log specifically for localhost as requested in your study material
         if (ip->daddr == IP4(127, 0, 0, 1)) {
