@@ -3,7 +3,7 @@
 This repository contains a complete development environment for writing and running eBPF programs using Golang.
 
 📚 Learning Resource:
-I am building this repository while learning from the book ["Learning eBPF" by Liz Rice](https://www.oreilly.com/library/view/learning-ebpf/9781098135119/). I use her examples as a foundation, implementing them in Go and extending them with my own custom additions and logic. Please note that the implementation varies significantly from the book.
+I am building this repository while learning from the book ["Learning eBPF" by Liz Rice](https://www.oreilly.com/library/view/learning-ebpf/9781098135119/). I use examples from the book as a foundation, implementing them in Go and extending them with my own custom additions and logic. Please note that the implementation varies significantly from the book.
 
 ---
 
