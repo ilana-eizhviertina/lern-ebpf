@@ -1,27 +1,31 @@
-.PHONY: init run-trace run-xdp clean start
+.PHONY: init run-trace run-xdp run-tc clean start format
 
 init:
 	-go mod init learn-ebpf
 	go get github.com/cilium/ebpf/cmd/bpf2go
 	go mod tidy
 
-# Shortcut to build and run the tracepoint program
 run-trace:
 	@echo "=> Building and running tracepoint..."
 	cd tracepoint && go generate ./...
 	go build -o app-tracepoint ./tracepoint
 	./app-tracepoint
 
-# Shortcut to build and run the XDP program
 run-xdp:
 	@echo "=> Building and running XDP..."
 	cd xdp && go generate ./...
 	go build -o app-xdp ./xdp
 	./app-xdp
 
+run-tc:
+	@echo "=> Building and running TC..."
+	cd tc && go generate ./...
+	go build -o app-tc ./tc
+	./app-tc
+
 clean:
-	rm -f app-tracepoint app-xdp
-	rm -rf tracepoint/gen/* xdp/gen/*
+	rm -f app-*
+	rm -rf tracepoint/gen/* xdp/gen/* tc/gen/*
 
 start:
 	docker run -it --rm --privileged \
