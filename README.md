@@ -1,7 +1,11 @@
-# eBPF Learning Lab (Docker on Mac)
+# eBPF Learning Lab
 
 This repository contains a complete development environment for writing and running eBPF programs using Golang.
-Because eBPF requires a Linux Kernel, this project runs inside a Docker container with special privileges.
+
+📚 Learning Resource:
+I am building this repository while learning from the book "Learning eBPF" by Liz Rice. While the book covers the core concepts, I am writing and publishing my examples here using Go to demonstrate how to implement these patterns in a Go environment.
+
+Note: Because eBPF requires a Linux Kernel, this project runs inside a Docker container with special privileges.
 
 ---
 
